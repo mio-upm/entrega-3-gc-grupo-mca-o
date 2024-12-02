@@ -26,12 +26,20 @@ datos_filtrados = datos[datos['Especialidad quirúrgica'].isin(operaciones)]
 
 C_i = {i : costes[i].mean() for i in datos_filtrados['Código operación']}
 
+K = {q : {} for q in costes.index}
+
+for index, row in datos_filtrados.iterrows():
+    print(row['Código operación'], " -> ", row['Hora inicio'], " - >", row['Hora fin'])
+
+
+B_ik = {(i,k): }
+
 inicio = datos_filtrados.iloc[0]['Hora inicio']
 fin = datos_filtrados.iloc[0]['Hora fin']
 
 inicio > fin
 
-K = [] # Planificaciones factibles
+
 
 # Modelo del problema ---------------------------------------------------------
 # Declaracion del modelo del problema
