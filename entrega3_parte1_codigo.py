@@ -1,9 +1,17 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Nov 26 13:59:15 2024
+Metodos Cuantitativos Avanzados (MIO)
 
-@author: jpaja
+ENTREGA 3: Asignaci´on de quir´ofanos en un hospital y generaci´on de columnas
+Modelo 1
+
+Grupo O
+- KIANI HANIE
+- PAEZ LEAL JAIRO EDUARDO
+- PAJARES CAMACHO JAVIER
+- TREVISAN FEDERICO
 """
+
 import openpyxl
 import pandas as pd
 import pulp as lp
