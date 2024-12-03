@@ -104,4 +104,4 @@ valores_variables = {v.name: v.varValue for v in model_1.variables() if v.varVal
 for v in model_1.variables():
     print(v.name, '=', v.value())
     
-print('Objective = ', lp.value(model_2.objective))
+print('Objective = ', lp.value(model_1.objective))
