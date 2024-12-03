@@ -65,7 +65,7 @@ def generate_direct_matrices(costes, datos):
     """
     n = len(costes.index)   # Numero di righe
     m = len(datos.index)    # Numero di colonne
-    
+ 
     # Per ogni colonna, seleziona una sola riga in cui mettere `True`
     row_indices = range(n)
     for col_selections in itertools.product(row_indices, repeat=m):
@@ -77,7 +77,7 @@ def generate_direct_matrices(costes, datos):
             matrix_df.index = [costes.index]
             matrix_df.columns = [datos.index]
             #Verifica che la pianificazione generata rispetti gli orari
-            if verify_time(datos, matrix_df): 
+            if verify_time(datos, matrix_df):
                 yield matrix_df
 
 # Datos -----------------------------------------------------------------------
@@ -87,19 +87,18 @@ costes = pd.read_excel('241204_costes.xlsx', index_col=0)                       
 operaciones = ['Cardiología Pediátrica', 'Cirugía Cardíaca Pediátrica', 'Cirugía Cardiovascular', 'Cirugía General y del Aparato Digestivo']
 datos_filtrados = datos[datos['Especialidad quirúrgica'].isin(operaciones)]
 
-C_i = {i : costes[i].mean() for i in datos_filtrados.index}
+# Generazione delle pianificazioni possibili
+K, n_plan = generate_direct_matrices(costes, datos_filtrados)
 
-K = generate_direct_matrices(costes, datos_filtrados)
 # Stampa alcune matrici valide
 for idx, df in zip(range(5), K):  # Mostra solo le prime 5
     print(f"Matrice valida {idx + 1}:\n{df}\n")
 
-# count = sum(1 for _ in K)
+# Costo medio di ogni operazione
+C_i = {i : costes[i].mean() for i in datos_filtrados.index}
 
-for index, row in datos_filtrados.iterrows():
-    print(index, " -> ", row['Hora inicio'], " - >", row['Hora fin'])
-
-
+# Costo di ogni pianificazione
+C_k = {idx : k for idx,k in enumerate(K, start=1)}
 
 inicio = datos_filtrados.iloc[0]['Hora inicio']
 fin = datos_filtrados.iloc[0]['Hora fin']
