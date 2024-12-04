@@ -88,7 +88,7 @@ operaciones = ['Cardiología Pediátrica', 'Cirugía Cardíaca Pediátrica', 'Ci
 datos_filtrados = datos[datos['Especialidad quirúrgica'].isin(operaciones)]
 
 # Generazione delle pianificazioni possibili
-K, n_plan = generate_direct_matrices(costes, datos_filtrados)
+K = generate_direct_matrices(costes, datos_filtrados)
 
 # Stampa alcune matrici valide
 for idx, df in zip(range(5), K):  # Mostra solo le prime 5
