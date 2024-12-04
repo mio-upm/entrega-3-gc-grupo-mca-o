@@ -11,15 +11,21 @@ Grupo O
 - PAJARES CAMACHO JAVIER
 - TREVISAN FEDERICO
 """
+# Importación de librerías ----------------------------------------------------
+import pulp as lp                                                              # Para la resolución de problemas de PL 
+import pandas as pd                                                            # Para trabajar con DataFrames
 
-import openpyxl
-import pandas as pd
-import pulp as lp
-import itertools
+
+# Datos -----------------------------------------------------------------------
 
 # Lectura operaciones/quirófanos
+
+'''costesxl = pd.read_excel("241204_costes.xlsx", index_col=0)
+costes_transpuesta = costesxl.T'''
+
 archivo = "241204_costes.xlsx" 
 costesxl = pd.read_excel(archivo)
+
 
 # Se transpone para que las filas i correspondan a las operaciones (equipos)
 # y las filas j correspondan a los quirófanos
@@ -63,7 +69,6 @@ for i in range(0,len(eqps)-1):
                                   'incomp': datosxl.loc[k]["Código operación"], 
                                   'equipo op': datosxl.loc[i]["Equipo de Cirugía"],
                                   'equipo incomp': datosxl.loc[k]["Equipo de Cirugía"]})
-
 df = pd.DataFrame(incompatibles)
 
 # df[df['operación'] == '20241204 OP-133']['incomp']
@@ -82,27 +87,26 @@ df.drop('Par_Ordenado', axis=1, inplace=True)
 df_filtrado = df[(df['operación'].isin(ops_cardio)) & (df['incomp'].isin(ops_cardio))]
 
 
-# Desarrollo del modelo 1
+# Modelo del problema ---------------------------------------------------------
+# Declaracion del modelo del problema
 model_1 = lp.LpProblem(name = "Modelo 1", sense = lp.LpMinimize)
 
-# Variable Xij:
+# Declaracion variables de decisión
 x = lp.LpVariable.dicts("x", [(i,j) for i in ops_cardio for j in qrfs], lowBound=None, cat=lp.LpBinary)
 
-# Función objetivo:
+# Declaracion de la función objetivo
 model_1 += lp.lpSum(costes_transpuesta.loc[i][j]*x[(i,j)] for i in ops_cardio for j in qrfs)   # Costes variables
 
-# Restricción cada op tiene que estar asignada a un quirófano
+# Declaracion restricciones
 for i in ops_cardio: 
-    model_1 += lp.lpSum(x[(i,j)] for j in qrfs) >= 1
+    model_1 += lp.lpSum(x[(i,j)] for j in qrfs) >= 1                           # Restricción cada op tiene que estar asignada a un quirófano
 
-# Restricción dos op no pueden ser incompatibles
-# Es decir que pueden ser asignadas al mismo quirófano pero no en la misma hora
-for i in ops_cardio:
-    for j in qrfs:
+for i in ops_cardio:                                                           # Restricción dos op no pueden ser incompatibles
+    for j in qrfs:                                                             # Es decir que pueden ser asignadas al mismo quirófano pero no en la misma hora
         for h in df_filtrado[df_filtrado['operación'] == i]['incomp']:
             model_1 += lp.lpSum(x[(h,j)] + x[(i,j)]) <= 1
   
-# Tras la resolución e impresión de resultados --------------------------------
+# Tras la resolución e impresión de resultados
 model_1.solve()
 print('Estado del problema = ', lp.LpStatus[model_1.status])
 
