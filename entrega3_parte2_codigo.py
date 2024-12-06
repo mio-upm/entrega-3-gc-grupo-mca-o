@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
+"""----------------------------------------------------------------------------
 Metodos Cuantitativos Avanzados (MIO)
 
 ENTREGA 3: Asignaci´on de quir´ofanos en un hospital y generaci´on de columnas
@@ -10,7 +10,7 @@ Grupo O
 - PAEZ LEAL JAIRO EDUARDO
 - PAJARES CAMACHO JAVIER
 - TREVISAN FEDERICO
-"""
+----------------------------------------------------------------------------"""
 # Importación de librerías ----------------------------------------------------
 import pulp as lp                                                              # Para la resolución de problemas de PL 
 import pandas as pd                                                            # Para trabajar con DataFrames

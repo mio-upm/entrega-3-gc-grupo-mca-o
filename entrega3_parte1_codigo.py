@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
+"""----------------------------------------------------------------------------
 Metodos Cuantitativos Avanzados (MIO)
 
 ENTREGA 3: Asignaci´on de quir´ofanos en un hospital y generaci´on de columnas
@@ -10,7 +10,7 @@ Grupo O
 - PAEZ LEAL JAIRO EDUARDO
 - PAJARES CAMACHO JAVIER
 - TREVISAN FEDERICO
-"""
+----------------------------------------------------------------------------"""
 # Importación de librerías ----------------------------------------------------
 import pulp as lp                                                              # Para la resolución de problemas de PL 
 import pandas as pd                                                            # Para trabajar con DataFrames
@@ -19,30 +19,19 @@ import pandas as pd                                                            #
 # Datos -----------------------------------------------------------------------
 
 # Lectura operaciones/quirófanos
-
-'''costesxl = pd.read_excel("241204_costes.xlsx", index_col=0)
-costes_transpuesta = costesxl.T'''
-
-archivo = "241204_costes.xlsx" 
-costesxl = pd.read_excel(archivo)
-
+costesxl = pd.read_excel("241204_costes.xlsx", index_col=0)
 
 # Se transpone para que las filas i correspondan a las operaciones (equipos)
 # y las filas j correspondan a los quirófanos
-costes_transpuesta = costesxl.transpose()
-costes_transpuesta.columns = costes_transpuesta.iloc[0]
-costes_transpuesta = costes_transpuesta.iloc[1:]
-
-# costes_transpuesta.loc["20241204 OP-133"]["Quirófano 1"]
+costes_transpuesta = costesxl.T
 
 # Se extraen la cantidad de quirófanos existentes
-qrfs = costesxl["Unnamed: 0"]
+qrfs = costes_transpuesta.columns
 
 print(costes_transpuesta)
 
 # Lectura datos de operaciones (relaciones operaciones -> equipos -> especialidad -> horas)
-archivo2 = "241204_datos_operaciones_programadas.xlsx"
-datosxl = pd.read_excel(archivo2)
+datosxl = pd.read_excel("241204_datos_operaciones_programadas.xlsx")
 
 #dict_por_filas = {index: row.to_dict() for index, row in datosxl.iterrows()}
 
